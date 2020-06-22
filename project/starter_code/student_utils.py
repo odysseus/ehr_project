@@ -5,13 +5,18 @@ import tensorflow as tf
 
 ####### STUDENTS FILL THIS OUT ######
 #Question 3
-def reduce_dimension_ndc(df, ndc_df):
+def reduce_dimension_ndc(df, ndc_code_df):
     '''
     df: pandas dataframe, input dataset
     ndc_df: pandas dataframe, drug code dataset used for mapping in generic names
     return:
         df: pandas dataframe, output dataframe with joined generic drug name
     '''
+
+    lookup = df.ndc_code.map(lambda x: ndc_code_df[ndc_code_df.NDC_Code == x]['Non-proprietary Name'])
+    newcol = pd.Series([r.values[0] if len(r.values) > 0 else 'None' for r in lookup])
+    df['generic_drug_name'] = newcol
+
     return df
 
 #Question 4
@@ -21,6 +26,10 @@ def select_first_encounter(df):
     return:
         - first_encounter_df: pandas dataframe, dataframe with only the first encounter for a given patient
     '''
+    eids = df.groupby('patient_nbr').encounter_id.agg(lambda x: list([y for y in x if y is not None]))
+    fenc = [sorted(lst)[0] for lst in eids]
+    first_encounter_df = df[df.encounter_id.isin(fenc)]
+
     return first_encounter_df
 
 

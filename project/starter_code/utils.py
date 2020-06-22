@@ -6,15 +6,15 @@ import os
 from student_utils import create_tf_numeric_feature
 
 def aggregate_dataset(df, grouping_field_list,  array_field):
-    df = df.groupby(grouping_field_list)['encounter_id', 
+    df = df.groupby(grouping_field_list)['encounter_id',
             array_field].apply(lambda x: x[array_field].values.tolist()).reset_index().rename(columns={
-    0: array_field + "_array"}) 
-    
+    0: array_field + "_array"})
+
     dummy_df = pd.get_dummies(df[array_field + '_array'].apply(pd.Series).stack()).sum(level=0)
-    dummy_col_list = [x.replace(" ", "_") for x in list(dummy_df.columns)] 
-    mapping_name_dict = dict(zip([x for x in list(dummy_df.columns)], dummy_col_list ) ) 
+    dummy_col_list = [x.replace(" ", "_") for x in list(dummy_df.columns)]
+    mapping_name_dict = dict(zip([x for x in list(dummy_df.columns)], dummy_col_list ) )
     concat_df = pd.concat([df, dummy_df], axis=1)
-    new_col_list = [x.replace(" ", "_") for x in list(concat_df.columns)] 
+    new_col_list = [x.replace(" ", "_") for x in list(concat_df.columns)]
     concat_df.columns = new_col_list
 
     return concat_df, dummy_col_list
@@ -24,7 +24,7 @@ def cast_df(df, col, d_type=str):
 
 def impute_df(df, col, impute_value=0):
     return df[col].fillna(impute_value)
-    
+
 def preprocess_df(df, categorical_col_list, numerical_col_list, predictor, categorical_impute_value='nan',             numerical_impute_value=0):
     df[predictor] = df[predictor].astype(float)
     for c in categorical_col_list:
@@ -46,7 +46,7 @@ def df_to_dataset(df, predictor,  batch_size=32):
 def write_vocabulary_file(vocab_list, field_name, default_value, vocab_dir='./diabetes_vocab/'):
     output_file_path = os.path.join(vocab_dir, str(field_name) + "_vocab.txt")
     # put default value in first row as TF requires
-    vocab_list = np.insert(vocab_list, 0, default_value, axis=0) 
+    vocab_list = np.insert(vocab_list, 0, default_value, axis=0)
     df = pd.DataFrame(vocab_list).to_csv(output_file_path, index=None, header=None)
     return output_file_path
 
@@ -60,9 +60,9 @@ def build_vocab_files(df, categorical_column_list, default_value='00'):
 def show_group_stats_viz(df, group):
     print(df.groupby(group).size())
     print(df.groupby(group).size().plot(kind='barh'))
- 
+
 '''
-Adapted from Tensorflow Probability Regression tutorial  https://github.com/tensorflow/probability/blob/master/tensorflow_probability/examples/jupyter_notebooks/Probabilistic_Layers_Regression.ipynb    
+Adapted from Tensorflow Probability Regression tutorial  https://github.com/tensorflow/probability/blob/master/tensorflow_probability/examples/jupyter_notebooks/Probabilistic_Layers_Regression.ipynb
 '''
 def posterior_mean_field(kernel_size, bias_size=0, dtype=None):
     n = kernel_size + bias_size
