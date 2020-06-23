@@ -1,0 +1,15 @@
+-------------------- 
+The test after selecting the first encounter checks number of UIDs on patients and encounters to see that they are equal. It does *not* check to see if there is only one row per patient. 
+
+When moving on to aggregating data, the utils code is not meant to be altered by students (ie: no student code between "select first encounter" and "aggregate dataset") and yet the code does *not* pass the next test which requires the number of rows to match the number of UIDs for patients and encounters (same as test above but now expects one row per patient).
+
+Either the utils code is missing a step or there is a missing direction. 
+
+
+-------------------
+select_model_features has a return statement that uses agg_drug_df instead of df. Might still work but the namespacing and usage shows that df was intended.
+
+
+
+---------------------
+Generating the vocab files does not work without the folder existing in the directory and it does not exist in the base repo

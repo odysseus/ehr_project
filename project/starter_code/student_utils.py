@@ -3,6 +3,8 @@ import numpy as np
 import os
 import tensorflow as tf
 
+from sklearn.model_selection import train_test_split
+
 ####### STUDENTS FILL THIS OUT ######
 #Question 3
 def reduce_dimension_ndc(df, ndc_code_df):
@@ -44,6 +46,9 @@ def patient_dataset_splitter(df, patient_key='patient_nbr'):
      - validation: pandas dataframe,
      - test: pandas dataframe,
     '''
+    train, holdout = train_test_split(df, train_size=0.6, shuffle=True)
+    validation, test = train_test_split(holdout, train_size=0.5, shuffle=True)
+
     return train, validation, test
 
 #Question 7
