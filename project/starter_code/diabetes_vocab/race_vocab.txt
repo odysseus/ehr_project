@@ -1,7 +1,7 @@
 00
 Caucasian
 AfricanAmerican
-Other
+Hispanic
 ?
 Asian
-Hispanic
+Other

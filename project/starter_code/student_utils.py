@@ -4,6 +4,7 @@ import os
 import tensorflow as tf
 
 from sklearn.model_selection import train_test_split
+from tensorflow import feature_column
 
 ####### STUDENTS FILL THIS OUT ######
 #Question 3
@@ -68,9 +69,10 @@ def create_tf_categorical_feature_cols(categorical_col_list,
         Which TF function allows you to read from a text file and create a categorical feature
         You can use a pattern like this below...
         tf_categorical_feature_column = tf.feature_column.......
-
         '''
-        output_tf_list.append(tf_categorical_feature_column)
+        cat = feature_column.categorical_column_with_vocabulary_file(c, vocab_file_path)
+        col = feature_column.indicator_column(cat)
+        output_tf_list.append(col)
     return output_tf_list
 
 #Question 8
@@ -79,7 +81,6 @@ def normalize_numeric_with_zscore(col, mean, std):
     This function can be used in conjunction with the tf feature column for normalization
     '''
     return (col - mean)/std
-
 
 
 def create_tf_numeric_feature(col, MEAN, STD, default_value=0):
@@ -92,15 +93,19 @@ def create_tf_numeric_feature(col, MEAN, STD, default_value=0):
     return:
         tf_numeric_feature: tf feature column representation of the input field
     '''
+    zscore = lambda c: normalize_numeric_with_zscore(c, MEAN, STD)
+    tf_numeric_feature = feature_column.numeric_column(col, normalizer_fn=zscore, default_value=default_value)
+
     return tf_numeric_feature
+
 
 #Question 9
 def get_mean_std_from_preds(diabetes_yhat):
     '''
     diabetes_yhat: TF Probability prediction object
     '''
-    m = '?'
-    s = '?'
+    m = diabetes_yhat.mean()
+    s = diabetes_yhat.stddev()
     return m, s
 
 # Question 10
@@ -111,4 +116,6 @@ def get_student_binary_prediction(df, col):
     return:
         student_binary_prediction: pandas dataframe converting input to flattened numpy array and binary labels
     '''
+    student_binary_prediction = (df[col] >= 7).astype(int)
+
     return student_binary_prediction
