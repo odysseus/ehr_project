@@ -116,6 +116,6 @@ def get_student_binary_prediction(df, col):
     return:
         student_binary_prediction: pandas dataframe converting input to flattened numpy array and binary labels
     '''
-    student_binary_prediction = (df[col] >= 7).astype(int)
+    student_binary_prediction = (df[col] >= 5).astype(int).to_numpy()
 
     return student_binary_prediction

@@ -13,3 +13,8 @@ select_model_features has a return statement that uses agg_drug_df instead of df
 
 ---------------------
 Generating the vocab files does not work without the folder existing in the directory and it does not exist in the base repo
+
+
+
+---------------------
+Rubric lists discussion about the bias-variance tradeoff, but the notebook asks for discussion on the precision-recall tradeoff. 
